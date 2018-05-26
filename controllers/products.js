@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/csv', uploader.single('file'), (req, res) => {
-  if (!req.file) return res.status(500).json({ error: 'No File.' })
+  if (!req.file) return res.json({ error: 'No File.' })
   let rows = []
   fastCSV.fromString(req.file.buffer.toString(), { headers: true })
     .on('data', objectFromCSVRow => rows.push(objectFromCSVRow))

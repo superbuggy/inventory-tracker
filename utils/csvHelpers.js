@@ -16,4 +16,4 @@ function formatRows (rows) {
   .filter(row => Object.keys(row).some(attribute => row[attribute]))
 }
 
-module.exports = { formatRows, trimFields }
+module.exports = { formatRows }

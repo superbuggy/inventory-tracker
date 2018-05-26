@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,76 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 
   <link rel="stylesheet" href="/public/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
   <script defer src="/public/script.js"></script>
   <title> Inventory Manager </title>
 </head>
+
 <body>
   <main>
-    <form action="/csv" method="POST" enctype="multipart/form-data">
+    <form class="csv-upload" action="/csv" method="POST" enctype="multipart/form-data">
       <input type="file" name="file" accept=".csv" />
       <input type="submit" value="Upload products .csv" />
     </form>
+    <form class="edit-entry hidden">
+      <label for="Author">Author
+        <input type="text" name="Author"></label>
+      <label for="Date">Date
+        <input type="date" name="Date"></label>
+      <label for="Country">Country
+        <input type="text" name="Country"></label>
+      <label for="Product_Name">Product_Name
+        <input type="text" name="Product_Name"></label>
+      <label for="Availability">Availability
+        <input type="text" name="Availability"></label>
+      <label for="Symptom">Symptom
+        <input type="text" name="Symptom"></label>
+      <label for="availability_en">availability_en
+        <input type="text" name="availability_en"></label>
+      <label for="availability_for">availability_for
+        <input type="text" name="availability_for"></label>
+      <input type="submit" value="Commit Changes">
+      <input type="submit" name="Cancel" value="Cancel">
+      <input type="submit" name="Delete" value="Delete Item">
+    </form>
     <div>
+      <label for="">
+        Search
+        <input class="search" type="text">
+      </label>
       <table>
         <thead>
           <tr>
-            <td>Author</td>
-            <td>Date</td>
-            <td>Country</td>
-            <td>Product_Name</td>
-            <td>Availability</td>
-            <td>Symptom</td>
-            <td>availability_en</td>
-            <td>availability_for</td>
+            <td>
+              <!-- Edit -->
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Author">Author</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Date">Date</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Country">Country</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Product_Name">Product_Name</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Availability">Availability</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="Symptom">Symptom</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="availability_en">availability_en</a>
+            </td>
+            <td>
+              <a href="#" class="sort" data-field="availability_for">availability_for</a>
+            </td>
+            <td class="hidden">
+              <!-- MongoId (Hidden) -->
+            </td>
           </tr>
         </thead>
         <tbody class="products-list">
@@ -37,4 +87,5 @@
     </div>
   </main>
 </body>
+
 </html>

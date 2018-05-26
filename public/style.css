@@ -8,13 +8,17 @@ main {
   background: rgb(98, 109, 84);
 }
 
+a {
+  color: rgb(255, 236, 161);
+}
+
 form {
   padding: 2em;
   margin: 0 auto;
   background: rgb(147, 177, 129);
 }
 
-thead td {
+thead td, tr td:nth-child(1) {
   background: rgba(98, 109, 84, 0.762);
 }
 
@@ -22,4 +26,8 @@ table, td {
   text-align: center;
   background: rgba(193, 233, 170, 0.563);
   border: 2px solid rgba(98, 109, 84, 0.762);
+}
+
+.hidden {
+  display: none;
 }

@@ -2,6 +2,7 @@ const PRODUCTS_API_URL = '/products'
 
 const table = document.querySelector('tbody.products-list')
 const editForm = document.querySelector('form.edit-entry')
+const newButton = document.querySelector('button.new-entry')
 const cancelButton = document.querySelector('form.edit-entry input[name="Cancel"]')
 const deleteButton = document.querySelector('form.edit-entry input[name="Delete"]')
 const searchBar = document.querySelector('input.search')
@@ -13,6 +14,7 @@ editForm.addEventListener('submit', handleEditFormSubmit)
 deleteButton.addEventListener('click', handleEditFormDelete)
 cancelButton.addEventListener('click', handleEditFormCancel)
 searchBar.addEventListener('input', handleSearch)
+newButton.addEventListener('click', handleEditFormNew)
 
 const FIELDS = [
   'Author',
@@ -32,13 +34,21 @@ const state = {
 }
 
 function createTable (products) {
+  console.log('createTable')
   table.innerHTML = ''
-  if (products) return state.products.forEach(product => createRow(product))
-  axios.get(PRODUCTS_API_URL)
-    .then(res => {
-      state.products = res.data
-      state.products.forEach(product => createRow(product))
+  // if (products) return state.products.forEach(product => createRow(product))
+  if (products) {
+    products.forEach(product => {
+      console.log('!')
+      createRow(product)
     })
+  } else {
+    axios.get(PRODUCTS_API_URL)
+      .then(res => {
+        state.products = res.data
+        state.products.forEach(product => createRow(product))
+      })
+  }
 }
 
 function createRow (product) {
@@ -72,10 +82,9 @@ function handleEditFormSubmit (event) {
   axios.put(`${PRODUCTS_API_URL}/${state.editingMongoId}`, getFormData())
     .then(res => {
       state.products = res.data
-      createTable(state.products)
+      createTable(state.editingMongoId ? state.products : null)
     })
-  editForm.classList.add('hidden')
-  state.editingMongoId = null
+  clearEditForm()
 }
 
 function getFormData () {
@@ -85,17 +94,39 @@ function getFormData () {
     if (input) dataFromForm[input.name] = input.value
     return dataFromForm
   }, formData)
-  return formData
+  return Object.assign(formData, {
+    Availability: formData.Availability.toLowerCase().includes('in'),
+    availability_en: formData.availability_en.toLowerCase().includes('y'),
+    availability_for: formData.availability_for.toLowerCase().includes('y')
+  })
 }
 
 function handleSort (event) {
   event.preventDefault()
   const header = event.target.dataset.field
   console.log(header)
+  state.products = state.products.sort((previous, current) => {
+    previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
+  })
+  createTable(state.products)
 }
 
 function handleSearch (event) {
-  console.log(event.target.value)
+  const queryProducts = state.products
+    .map(product => {
+      const productSansId = Object.assign({}, product)
+      delete productSansId._id
+      delete productSansId.updatedAt
+      delete productSansId.createdAt
+      return Object.values(productSansId).join('').toLowerCase()
+    })
+  const filteredResults = state.products.filter((_, i) => queryProducts[i].includes(event.target.value.toLowerCase()))
+  createTable(event.target.value ? filteredResults : state.products)
+}
+
+function handleEditFormNew (event) {
+  clearEditForm()
+  editForm.classList.remove('hidden')
 }
 
 function handleEditFormDelete (event) {
@@ -115,6 +146,7 @@ function clearEditForm () {
   document.querySelectorAll('form.edit-entry input').forEach(input => {
     if (input.type !== 'submit') input.value = ''
   })
+  state.editingMongoId = null
   editForm.classList.add('hidden')
 }
 
@@ -126,7 +158,7 @@ function editItem (event) {
 }
 
 function populateForm (mongoId) {
-  const product = adaptFields(state.products.find(product => product._id === mongoId))
+  const product = adaptFieldsForPopulatingForm(state.products.find(product => product._id === mongoId))
   Object.keys(product).forEach(attribute => {
     const selectionAttribute = attribute === '_id' ? 'mongoId' : attribute
     const input = editForm.querySelector(`input[name^="${selectionAttribute}"]`)
@@ -135,7 +167,7 @@ function populateForm (mongoId) {
   window.scrollTo(0, 0)
 }
 
-function adaptFields (product) {
+function adaptFieldsForPopulatingForm (product) {
   return Object.keys(product).reduce((newProduct, attribute) => {
     newProduct[attribute] = product[attribute]
     if (attribute === 'Date') newProduct[attribute] = formattedDate(product[attribute])
@@ -144,7 +176,7 @@ function adaptFields (product) {
   }, {})
 }
 
-// replace with moment
+// TODO: replace with moment.js ?
 function formattedDate (dateString) {
   const date = new Date(dateString)
   date.setMinutes(date.getMinutes() - date.getTimezoneOffset())

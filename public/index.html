@@ -15,10 +15,13 @@
 
 <body>
   <main>
-    <form class="csv-upload" action="/csv" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" accept=".csv" />
-      <input type="submit" value="Upload products .csv" />
-    </form>
+    <header>
+      <form class="csv-upload" action="/csv" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" >
+        <input type="submit" value="Upload products .csv" >
+      </form>
+      <button class="new-entry">New</button>
+    </header>
     <form class="edit-entry hidden">
       <label for="Author">Author
         <input type="text" name="Author"></label>

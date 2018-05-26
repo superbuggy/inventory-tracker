@@ -1,4 +1,7 @@
 main {
+  color: rgb(241, 255, 233);
+  text-shadow: 1px 1px 0px rgba(98, 109, 84, 0.762),
+               1px 1px 2px rgb(66, 77, 52);
   margin: 0 auto;
   width: 66vw;
   min-height: 66vh;
@@ -11,7 +14,12 @@ form {
   background: rgb(147, 177, 129);
 }
 
+thead td {
+  background: rgba(98, 109, 84, 0.762);
+}
+
 table, td {
+  text-align: center;
   background: rgba(193, 233, 170, 0.563);
   border: 2px solid rgba(98, 109, 84, 0.762);
 }

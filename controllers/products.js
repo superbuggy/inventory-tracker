@@ -19,16 +19,10 @@ router.post('/csv', uploader.single('file'), (req, res) => {
   let rows = []
   fastCSV.fromString(req.file.buffer.toString(), { headers: true })
     .on('data', objectFromCSVRow => rows.push(objectFromCSVRow))
-    .on('end', _ => {
-      let schemaFormattedRows = formatRows(rows)
-      Product.create(schemaFormattedRows)
-        .catch(anOopsy => console.error(anOopsy))
-        .then(_ => {
-          Product.find()
-            .then(products => res.redirect('/'))
-            .catch(anOopsy => console.error(anOopsy))
-        })
-    })
+    .on('end', _ => Product.create(formatRows(rows))
+      .catch(anOopsy => console.error(anOopsy))
+      .then(_ => res.redirect('/'))
+    )
 })
 
 module.exports = router

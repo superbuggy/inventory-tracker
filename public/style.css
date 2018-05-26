@@ -1,0 +1,17 @@
+main {
+  margin: 0 auto;
+  width: 66vw;
+  min-height: 66vh;
+  background: rgb(98, 109, 84);
+}
+
+form {
+  padding: 2em;
+  margin: 0 auto;
+  background: rgb(147, 177, 129);
+}
+
+table, td {
+  background: rgba(193, 233, 170, 0.563);
+  border: 2px solid rgba(98, 109, 84, 0.762);
+}

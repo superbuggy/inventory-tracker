@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/public/style.css">
+  <script defer src="/public/script.js"></script>
+  <title> Inventory Manager </title>
+</head>
+<body>
+  <main>
+    <form action="/csv" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" />
+      <input type="submit" value="Upload products .csv" />
+    </form>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Author</td>
+            <td>Date</td>
+            <td>Country</td>
+            <td>Product_Name</td>
+            <td>Availability</td>
+            <td>Symptom</td>
+            <td>availability_en</td>
+            <td>availability_for</td>
+          </tr>
+        </thead>
+        <tbody class="products-list">
+
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

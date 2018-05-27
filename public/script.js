@@ -50,6 +50,7 @@ function createTable (products) {
     axios.get(PRODUCTS_API_URL)
       .then(res => {
         state.products = res.data
+        state.filteredProducts = res.data
         state.products.forEach(product => createRow(changeBooleanFields(product)))
       })
   }

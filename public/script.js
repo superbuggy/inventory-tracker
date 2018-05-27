@@ -30,7 +30,15 @@ const FIELDS = [
 
 const state = {
   products: [],
-  editingMongoId: null
+  editingMongoId: null,
+  filters: initFilters()
+}
+
+function initFilters () {
+  return FIELDS.slice(0, -1).reduce((filters, field) => {
+    filters[field] = false
+    return filters
+  }, {})
 }
 
 function createTable (products) {
@@ -106,9 +114,10 @@ function handleSort (event) {
   const header = event.target.dataset.field
   console.log(header)
   state.products = state.products.sort((previous, current) => {
-    previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
+    return previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
   })
-  createTable(state.products)
+  state.filters[header] = !state.filters[header]
+  createTable(state.filters[header] ? state.products : state.products.reverse())
 }
 
 function handleSearch (event) {

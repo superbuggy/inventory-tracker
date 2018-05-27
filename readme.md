@@ -1,6 +1,6 @@
 # Inventory Tracker
 
-> Near MVP
+> MVP
 
 ## Set Up
 

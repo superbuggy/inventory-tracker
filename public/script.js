@@ -30,6 +30,7 @@ const FIELDS = [
 
 const state = {
   products: [],
+  filteredProducts: [],
   editingMongoId: null,
   filters: initFilters()
 }
@@ -42,19 +43,14 @@ function initFilters () {
 }
 
 function createTable (products) {
-  console.log('createTable')
   table.innerHTML = ''
-  // if (products) return state.products.forEach(product => createRow(product))
   if (products) {
-    products.forEach(product => {
-      console.log('!')
-      createRow(product)
-    })
+    products.forEach(product => createRow(product))
   } else {
     axios.get(PRODUCTS_API_URL)
       .then(res => {
         state.products = res.data
-        state.products.forEach(product => createRow(product))
+        state.products.forEach(product => createRow(changeBooleanFields(product)))
       })
   }
 }
@@ -112,12 +108,11 @@ function getFormData () {
 function handleSort (event) {
   event.preventDefault()
   const header = event.target.dataset.field
-  console.log(header)
-  state.products = state.products.sort((previous, current) => {
+  state.filteredProducts = state.filteredProducts.sort((previous, current) => {
     return previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
   })
   state.filters[header] = !state.filters[header]
-  createTable(state.filters[header] ? state.products : state.products.reverse())
+  createTable(state.filters[header] ? state.filteredProducts : state.filteredProducts.reverse())
 }
 
 function handleSearch (event) {
@@ -129,8 +124,9 @@ function handleSearch (event) {
       delete productSansId.createdAt
       return Object.values(productSansId).join('').toLowerCase()
     })
-  const filteredResults = state.products.filter((_, i) => queryProducts[i].includes(event.target.value.toLowerCase()))
-  createTable(event.target.value ? filteredResults : state.products)
+  state.filteredProducts = state.products.filter((_, i) => queryProducts[i].includes(event.target.value.toLowerCase()))
+  state.filteredProducts = event.target.value ? state.filteredProducts : state.products
+  createTable(state.filteredProducts)
 }
 
 function handleEditFormNew (event) {
@@ -167,7 +163,7 @@ function editItem (event) {
 }
 
 function populateForm (mongoId) {
-  const product = adaptFieldsForPopulatingForm(state.products.find(product => product._id === mongoId))
+  const product = changeBooleanFields(state.products.find(product => product._id === mongoId))
   Object.keys(product).forEach(attribute => {
     const selectionAttribute = attribute === '_id' ? 'mongoId' : attribute
     const input = editForm.querySelector(`input[name^="${selectionAttribute}"]`)
@@ -176,17 +172,17 @@ function populateForm (mongoId) {
   window.scrollTo(0, 0)
 }
 
-function adaptFieldsForPopulatingForm (product) {
+function changeBooleanFields (product) {
   return Object.keys(product).reduce((newProduct, attribute) => {
     newProduct[attribute] = product[attribute]
-    if (attribute === 'Date') newProduct[attribute] = formattedDate(product[attribute])
+    if (attribute === 'Date') newProduct[attribute] = dateStringForDateInput(product[attribute])
     if (attribute.toLowerCase().includes('avail')) newProduct[attribute] = newProduct[attribute] ? 'yes' : 'no'
     return newProduct
   }, {})
 }
 
 // TODO: replace with moment.js ?
-function formattedDate (dateString) {
+function dateStringForDateInput (dateString) {
   const date = new Date(dateString)
   date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
   return date.toISOString().slice(0, 10)

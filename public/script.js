@@ -45,7 +45,7 @@ function initFilters () {
 function createTable (products) {
   table.innerHTML = ''
   if (products) {
-    products.forEach(product => createRow(product))
+    products.forEach(product => createRow(changeBooleanFields(product)))
   } else {
     axios.get(PRODUCTS_API_URL)
       .then(res => {

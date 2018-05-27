@@ -18,8 +18,21 @@ header, form {
   background: rgb(147, 177, 129);
 }
 
+input.search {
+  text-align: center;
+  color: rgb(241, 255, 233);
+}
+
 thead td, tr td:nth-child(1) {
   background: rgba(98, 109, 84, 0.762);
+}
+
+tr:hover {
+  background: rgba(128, 121, 67, 0.762);
+}
+
+tr {
+  transition: background .1s ease-out;
 }
 
 table, td {

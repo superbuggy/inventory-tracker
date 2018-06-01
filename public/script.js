@@ -115,7 +115,12 @@ function handleSort (event) {
   event.preventDefault()
   const header = event.target.dataset.field
   state.filteredProducts = state.filteredProducts.sort((previous, current) => {
-    return previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
+    if (header !== 'Date') {
+      return previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
+    } else {
+      let [previousDate, currentDate] = [new Date(previous.Date), new Date(current.Date)]
+      return previousDate.getTime() - currentDate.getTime()
+    }
   })
   state.filters[header].reversed = !state.filters[header].reversed
   let products = state.filters[header].reversed ? state.filteredProducts.reverse() : state.filteredProducts
@@ -124,7 +129,6 @@ function handleSort (event) {
 
 function handleSearch (event) {
   const filterOnHeaders = Object.keys(state.filters).filter(filter => state.filters[filter].active)
-  // console.log(state.filters, filterOnHeaders)
   const queryProducts = state.products.map(product => {
     const changedProduct = changeBooleanFields(product)
     return filterOnHeaders.reduce((fieldsString, header) => {
@@ -132,11 +136,9 @@ function handleSearch (event) {
       return fieldsString.toLowerCase()
     }, '')
   })
-  console.log(queryProducts)
   state.filteredProducts = state.products.filter((_, i) => {
     return queryProducts[i].includes(event.target.value.toLowerCase())
   })
-  console.log(state.filteredProducts)
   state.filteredProducts = event.target.value ? state.filteredProducts : state.products
   createTable(state.filteredProducts)
 }

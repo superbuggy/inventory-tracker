@@ -44,3 +44,7 @@ table, td {
 .hidden {
   display: none;
 }
+
+td.active-filter {
+  background: rgba(181, 182, 73, 0.762);
+}

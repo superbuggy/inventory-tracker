@@ -10,6 +10,7 @@ const searchBar = document.querySelector('input.search')
 createTable()
 
 document.querySelectorAll('.sort').forEach(column => column.addEventListener('click', handleSort))
+document.querySelectorAll('thead td').forEach(header => header.addEventListener('click', handleFilter))
 editForm.addEventListener('submit', handleEditFormSubmit)
 deleteButton.addEventListener('click', handleEditFormDelete)
 cancelButton.addEventListener('click', handleEditFormCancel)
@@ -32,12 +33,15 @@ const state = {
   products: [],
   filteredProducts: [],
   editingMongoId: null,
-  filters: initFilters()
+  filters: initSearchFilters()
 }
 
-function initFilters () {
+function initSearchFilters () {
   return FIELDS.slice(0, -1).reduce((filters, field) => {
-    filters[field] = false
+    filters[field] = {
+      reversed: false,
+      active: false
+    }
     return filters
   }, {})
 }
@@ -107,25 +111,32 @@ function getFormData () {
 }
 
 function handleSort (event) {
+  event.stopPropagation()
   event.preventDefault()
   const header = event.target.dataset.field
   state.filteredProducts = state.filteredProducts.sort((previous, current) => {
     return previous[header].toString().charCodeAt(0) - current[header].toString().charCodeAt(0)
   })
-  state.filters[header] = !state.filters[header]
-  createTable(state.filters[header] ? state.filteredProducts : state.filteredProducts.reverse())
+  state.filters[header].reversed = !state.filters[header].reversed
+  let products = state.filters[header].reversed ? state.filteredProducts.reverse() : state.filteredProducts
+  createTable(products)
 }
 
 function handleSearch (event) {
-  const queryProducts = state.products
-    .map(product => {
-      const productSansId = Object.assign({}, product)
-      delete productSansId._id
-      delete productSansId.updatedAt
-      delete productSansId.createdAt
-      return Object.values(productSansId).join('').toLowerCase()
-    })
-  state.filteredProducts = state.products.filter((_, i) => queryProducts[i].includes(event.target.value.toLowerCase()))
+  const filterOnHeaders = Object.keys(state.filters).filter(filter => state.filters[filter].active)
+  // console.log(state.filters, filterOnHeaders)
+  const queryProducts = state.products.map(product => {
+    const changedProduct = changeBooleanFields(product)
+    return filterOnHeaders.reduce((fieldsString, header) => {
+      fieldsString += changedProduct[header]
+      return fieldsString.toLowerCase()
+    }, '')
+  })
+  console.log(queryProducts)
+  state.filteredProducts = state.products.filter((_, i) => {
+    return queryProducts[i].includes(event.target.value.toLowerCase())
+  })
+  console.log(state.filteredProducts)
   state.filteredProducts = event.target.value ? state.filteredProducts : state.products
   createTable(state.filteredProducts)
 }
@@ -182,8 +193,15 @@ function changeBooleanFields (product) {
   }, {})
 }
 
-// TODO: replace with moment.js ?
-function dateStringForDateInput (dateString) {
+function handleFilter (event) {
+  const headerCell = event.target
+  const header = headerCell.querySelector('a').dataset.field
+  state.filters[header].active = !state.filters[header].active
+  if (state.filters[header].active) headerCell.classList.add('active-filter')
+  if (!state.filters[header].active) headerCell.classList.remove('active-filter')
+}
+
+function dateStringForDateInput (dateString) { // formatting for HTML5 date input
   const date = new Date(dateString)
   date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
   return date.toISOString().slice(0, 10)

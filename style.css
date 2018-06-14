@@ -8,7 +8,18 @@ body {
 }
 
 .results {
+  display: flex;
+  justify-content: space-around;
   opacity: 0;
+}
+
+.result {
+  padding: .5em;
+  text-align: left;
+  flex-basis: 30vw;
+  border: 2px solid rgb(150, 150, 150);
+  border-radius: 12px;
+  background: rgb(212, 212, 212);
 }
 
 div.categories {
@@ -18,7 +29,6 @@ div.categories {
 }
 
 .category {
-  text-align: left;
   flex-basis: 20%;
   justify-content: center;
   padding: .5em;

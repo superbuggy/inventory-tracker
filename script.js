@@ -1,6 +1,6 @@
 const searchBar = document.querySelector('input.search')
 
-console.log(searchBar)``
+console.log(searchBar)
 
 const BE_WELL_AWAY_ENDPOINT = 'https://cellmateapp.com/api/gamFYB//BeWellAway'
 

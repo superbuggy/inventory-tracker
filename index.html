@@ -10,20 +10,22 @@
 </head>
 <body>
   <div class="search">
-    <h1>Search All Products</h1>
-    <!-- <form class="search"> -->
+    <h1 class="search">Search <span class="product-type">All Products</span> in <span class="location">All Countries</span></h1>
       <input type="text" class="search" placeholder="Begin typing to filter results"/>
       <select name="country">
-        <option>Choose a country...</option>
+        <option>All Countries</option>
+        <!-- Populates on fetch -->
       </select>
-    <!-- </form> -->
   </div>
+  <section class="categories">
+    <h1 class="categories">Or Choose A Category</h1>
+    <div class="categories">
+      <!-- Populates on fetch -->
+    </div>
+  </section>
   
-  <h1 class="categories">Or Choose A Category</h1>
-  <div class="categories">
-  </div>
-
   <div class="results">
+      <!-- Populates on fetch -->
   </div>
 </body>
 </html>

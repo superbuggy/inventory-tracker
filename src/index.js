@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
+import BeWellAway from './components/BeWellAway/BeWellAway'
 import registerServiceWorker from './registerServiceWorker'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<BeWellAway />, document.getElementById('root'))
 registerServiceWorker()

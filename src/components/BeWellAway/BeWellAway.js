@@ -10,17 +10,37 @@ import { BE_WELL_AWAY_API } from '../../constants'
 class BeWellAway extends Component {
   constructor () {
     super()
-    this.state = {
+    this.state = this.initialState()
+
+    this.initializeState = this.initializeState.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+    this.changeCountry = this.changeCountry.bind(this)
+    this.changeCategory = this.changeCategory.bind(this)
+  }
+
+  initialState () {
+    return {
       products: [],
       filteredProducts: [],
       searchTerm: '',
       activeCategory: 'All Categories',
       activeCountry: 'All Countries'
     }
+  }
 
-    this.handleSearch = this.handleSearch.bind(this)
-    this.changeCountry = this.changeCountry.bind(this)
-    this.changeCategory = this.changeCategory.bind(this)
+  initializeState () {
+    this.setState(
+      prevState => {
+        const products = prevState.products
+        console.log(products)
+        return {
+          ...this.initialState(),
+          products,
+          filteredProducts: products
+        }
+      },
+      this.applyFilters
+    )
   }
 
   getCountries () {
@@ -120,6 +140,7 @@ class BeWellAway extends Component {
         <DropDown changeCountry={this.changeCountry} countries={countries} />
         <p> { `${results} ${categoryText} ${productsText} in ${countryText}` } </p>
         <CategoryFilters changeCategory={this.changeCategory} categories={categories} />
+        <button onClick={this.initializeState}>x</button>
         <ResultsContainer products={this.state.filteredProducts} />
       </div>
     )

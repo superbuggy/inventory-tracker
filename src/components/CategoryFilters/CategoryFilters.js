@@ -2,19 +2,20 @@ import React from 'react'
 import './CategoryFilters.css'
 
 const CategoryFilters = props => {
-  const categoryButtons = props.categories.map(category => (
+  const categoryButtons = props.categories.map((category, index) => (
     <input
-      type="button"
+      key={index}
+      type={'button'}
       onClick={props.changeCategory}
-      className='category-button'
+      className={'category-button'}
       name={category}
       value={category}
     />
   ))
   return (
-    <div>
+    <div className={'categories-container'}>
       <input
-        type="button"
+        type={'button'}
         onClick={props.changeCategory}
         className='category-button'
         name={'All Categories'}

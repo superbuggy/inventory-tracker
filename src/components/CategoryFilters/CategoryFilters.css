@@ -1,4 +1,26 @@
+.categories-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .category-button {
-  display: inline;
-  border: 1px solid blue;
+  margin: 1% 1%;
+  padding: 1em;
+  flex-basis: 20%;
+  border: 2px solid rgb(227, 227, 227);
+  border-radius: 1em;
+  background: rgb(253, 253, 253);
+  color: rgb(40, 51, 149);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.category-button:focus {
+  outline:0;
+}
+
+::placeholder {
+  font-style: italic;
+  color: rgb(112, 116, 155);
 }

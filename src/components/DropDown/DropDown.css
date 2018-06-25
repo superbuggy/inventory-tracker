@@ -1,0 +1,8 @@
+select {
+  margin: 0 auto;
+  margin-left: 1em;
+  font-size: 16px;
+  background: rgb(253, 253, 253);
+  border: 2px solid rgb(227, 227, 227);
+  color: rgb(40, 51, 149);
+}

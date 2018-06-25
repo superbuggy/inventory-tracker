@@ -1,4 +1,5 @@
 import React from 'react'
+import './DropDown.css'
 
 const DropDown = props => {
   const options = props.countries.map((country, index) => (

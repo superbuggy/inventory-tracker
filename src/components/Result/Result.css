@@ -1,4 +1,38 @@
 .result {
+  border-radius: 1em;
   border: 1px solid black;
+  flex-basis: 25%;
+  margin: 2%;
+  border: 2px solid rgb(227, 227, 227);
+  background: rgb(253, 253, 253);
+  text-align: left;
+}
+
+.result h4, .result h3 {
+  padding: 0 1em;
+}
+
+.result h3 {
+  color: rgb(40, 51, 149);
+}
+
+.ingredients {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.active-ingredient {
+}
+
+p {
+  padding: 0 1em;
+}
+
+.result p.availability {
   padding: 1em;
+  font-size: 12px;
+  background: rgb(227, 241, 247);
+  border-top: 2px solid rgb(227, 227, 227);
+  border-bottom: 2px solid rgb(227, 227, 227);
 }

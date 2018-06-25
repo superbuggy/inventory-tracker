@@ -4,7 +4,6 @@ import './BeWellAway.css'
 import SearchBar from '../SearchBar/SearchBar'
 import CategoryFilters from '../CategoryFilters/CategoryFilters'
 import ResultsContainer from '../ResultsContainer/ResultsContainer'
-import DropDown from '../DropDown/DropDown'
 import { BE_WELL_AWAY_API } from '../../constants'
 
 class BeWellAway extends Component {
@@ -55,8 +54,8 @@ class BeWellAway extends Component {
   doesProductIncludeSearchTerm (product, searchTerm) {
     console.log(!!this.state.searchTerm)
     if (!this.state.searchTerm) return true
-    return product['Product Name'].toLowerCase().includes(searchTerm.toLowerCase())
-      || product['Active Ingredients (EN)'].toLowerCase().includes(searchTerm.toLowerCase())
+    return product['Product Name (English)'].toLowerCase().includes(searchTerm.toLowerCase())
+      || product['Active Ingredients (English)'].toLowerCase().includes(searchTerm.toLowerCase())
       || product['Active Ingredients (abroad)'].toLowerCase().includes(searchTerm.toLowerCase())
   }
 
@@ -89,7 +88,7 @@ class BeWellAway extends Component {
     event.persist()
     this.setState(
       prevState => ({ ...prevState, searchTerm: event.target.value }),
-      _ => this.applyFilters()
+      this.applyFilters
     )
   }
 
@@ -97,7 +96,7 @@ class BeWellAway extends Component {
     event.persist()
     this.setState(
       prevState => ({ ...prevState, activeCountry: event.target.value }),
-      _ => this.applyFilters()
+      this.applyFilters
     )
   }
 
@@ -106,7 +105,7 @@ class BeWellAway extends Component {
     event.persist()
     this.setState(
       prevState => ({ ...prevState, activeCategory: event.target.value }),
-      _ => this.applyFilters()
+      this.applyFilters
     )
   }
 
@@ -119,13 +118,14 @@ class BeWellAway extends Component {
           filteredProducts: products
         }))
       })
+      .catch(error => console.log(error))
   }
 
   render () {
     const countries = this.getCountries()
     const categories = this.getCategories()
     const results = this.state.filteredProducts.length
-    const productsText = results.length === 1
+    const productsText = results === 1
       ? 'product'
       : 'products'
     const categoryText = this.state.activeCategory === 'All Categories'
@@ -134,13 +134,20 @@ class BeWellAway extends Component {
     const countryText = this.state.activeCountry === 'All Countries'
       ? 'all countries'
       : this.state.activeCountry
+    const headerText = this.state.activeCategory === 'All Categories'
+      ? `${this.state.activeCategory} In ${this.state.activeCountry}`
+      : `${this.state.activeCategory}s In ${this.state.activeCountry}`
     return (
-      <div>
-        <SearchBar handleSearch={this.handleSearch} />
-        <DropDown changeCountry={this.changeCountry} countries={countries} />
+      <div className={'app-container'}>
+        <SearchBar
+          headerText={headerText}
+          handleSearch={this.handleSearch}
+          changeCountry={this.changeCountry}
+          countries={countries}
+          resetFilters={this.initializeState}
+        />
         <p> { `${results} ${categoryText} ${productsText} in ${countryText}` } </p>
         <CategoryFilters changeCategory={this.changeCategory} categories={categories} />
-        <button onClick={this.initializeState}>x</button>
         <ResultsContainer products={this.state.filteredProducts} />
       </div>
     )
